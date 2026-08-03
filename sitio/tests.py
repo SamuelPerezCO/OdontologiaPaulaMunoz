@@ -133,6 +133,21 @@ class PaginaTest(TestCase):
         )
         json.loads(bruto.group(1))
 
+    def test_el_resumen_de_horario_no_deja_separadores_sueltos(self):
+        respuesta = self.client.get(reverse('sitio:inicio'))
+        resumen = respuesta.context['resumen_horario']
+        self.assertEqual(resumen, 'Lunes a viernes 8:00 – 18:00 · Sábado 8:00 – 14:00')
+        self.assertFalse(resumen.strip().endswith('·'))
+        self.assertNotIn('Domingo', resumen)
+
+    def test_la_seccion_de_sedacion_pasa_a_una_columna_sin_testimonios(self):
+        contenido = self.client.get(reverse('sitio:inicio')).content.decode()
+        self.assertIn('sedation__inner--solo', contenido)
+
+        Testimonio.objects.create(texto='Muy bien', autor='Ana G.', publicado=True)
+        contenido = self.client.get(reverse('sitio:inicio')).content.decode()
+        self.assertNotIn('sedation__inner--solo', contenido)
+
     def test_solo_se_publican_los_testimonios_marcados(self):
         Testimonio.objects.create(texto='Visible', autor='Ana G.', publicado=True)
         Testimonio.objects.create(texto='Oculto', autor='Luis P.', publicado=False)

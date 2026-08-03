@@ -31,9 +31,7 @@
           </div>
           <div>
             <dt>Horario</dt>
-            <dd>
-              {% for grupo in horarios %}{% if not grupo.cerrado %}{{ grupo.etiqueta }} {{ grupo.franja }}{% if not forloop.last %} · {% endif %}{% endif %}{% endfor %}
-            </dd>
+            <dd>{{ resumen_horario }}</dd>
           </div>
         </dl>
       </div>
@@ -105,7 +103,7 @@
 
   <!-- ─────────────────────── Sedación ─────────────────────── -->
   <section class="section sedation" id="sedacion">
-    <div class="wrap sedation__inner">
+    <div class="wrap sedation__inner{% if not testimonios %} sedation__inner--solo{% endif %}">
       <div class="sedation__copy">
         <p class="eyebrow eyebrow--light">Odontología bajo sedación</p>
         <h2 class="section__title sedation__title">Si el miedo es el problema, empecemos por ahí.</h2>

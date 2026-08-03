@@ -303,6 +303,10 @@ a { color: inherit; }
 
 /* ── Secciones ───────────────────────────────────────────── */
 
+/* La cabecera es sticky, así que los anclajes necesitan dejarle sitio o
+   el título de la sección queda debajo de ella. */
+.section, .hero { scroll-margin-top: 90px; }
+
 .section { padding: clamp(3.5rem, 7vw, 6.5rem) 0; }
 
 .section__head { max-width: 52ch; margin-bottom: clamp(2.5rem, 4vw, 3.5rem); }
@@ -407,6 +411,14 @@ a { color: inherit; }
   grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
   gap: clamp(2.5rem, 5vw, 5rem);
   align-items: center;
+}
+
+/* Sin testimonios publicados no hay segunda columna: sin esto, media
+   sección queda vacía. Se estrecha la columna, no el contenedor, para que
+   el texto siga alineado con el resto de las secciones. */
+.sedation__inner--solo {
+  grid-template-columns: minmax(0, 62ch);
+  justify-content: start;
 }
 
 .sedation__title { color: var(--esmalte); margin-bottom: 1.5rem; }

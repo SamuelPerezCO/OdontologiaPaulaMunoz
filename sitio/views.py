@@ -140,11 +140,20 @@ def inicio(request):
     horarios = agrupar_horarios(Horario.objects.all())
     publicados = list(Tratamiento.objects.publicados())
 
+    # Resumen de una línea para el encabezado. Se arma aquí y no en la
+    # plantilla porque los días cerrados no se muestran, y encadenar
+    # separadores con {% if %} dejaba un «·» suelto al final.
+    resumen_horario = ' · '.join(
+        f'{grupo["etiqueta"]} {grupo["franja"]}'
+        for grupo in horarios if not grupo['cerrado']
+    )
+
     contexto = {
         'tratamientos': [t for t in publicados if t.zona],
         'otros_tratamientos': [t for t in publicados if not t.zona],
         'testimonios': Testimonio.objects.filter(publicado=True),
         'horarios': horarios,
+        'resumen_horario': resumen_horario,
         'formulario': formulario,
         'ficha_json': datos_estructurados(request, datos, horarios, publicados),
     }
