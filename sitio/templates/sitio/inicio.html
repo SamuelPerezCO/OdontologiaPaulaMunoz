@@ -1,0 +1,230 @@
+{% extends "sitio/base.html" %}
+
+{% block title %}{{ clinica.nombre }} — {{ clinica.ciudad }}{% endblock %}
+{% block description %}Odontología general y todas las especialidades en {{ clinica.ciudad }}, {{ clinica.departamento }}. Atención bajo sedación para pacientes con miedo al odontólogo. {{ clinica.direccion_completa }}.{% endblock %}
+{% block og_title %}{{ clinica.nombre }} — {{ clinica.ciudad }}{% endblock %}
+{% block og_description %}Todas las especialidades en un solo consultorio. Y si el miedo es lo que te ha frenado, podemos atenderte bajo sedación.{% endblock %}
+
+{% block contenido %}
+
+  <!-- ───────────────────────── Hero ───────────────────────── -->
+  <section class="hero" id="inicio">
+    <div class="wrap hero__inner">
+
+      <div class="hero__copy">
+        <p class="eyebrow">{{ clinica.ciudad }} · {{ clinica.departamento }}</p>
+        <h1 class="hero__title">Odontología<br>que no da miedo.</h1>
+        <p class="hero__lede">
+          Todas las especialidades en un solo consultorio. Y si el miedo es lo que te ha
+          frenado todos estos años, podemos atenderte bajo sedación.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--solid" href="{{ whatsapp_url }}" target="_blank" rel="noopener">
+            Escribir por WhatsApp
+          </a>
+          <a class="btn btn--ghost" href="#tratamientos">Ver tratamientos</a>
+        </div>
+        <dl class="hero__facts">
+          <div>
+            <dt>Dirección</dt>
+            <dd>{{ clinica.direccion }}{% if clinica.consultorio %} · {{ clinica.consultorio }}{% endif %}</dd>
+          </div>
+          <div>
+            <dt>Horario</dt>
+            <dd>
+              {% for grupo in horarios %}{% if not grupo.cerrado %}{{ grupo.etiqueta }} {{ grupo.franja }}{% if not forloop.last %} · {% endif %}{% endif %}{% endfor %}
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Elemento firma: la arcada superior. Se construye en js/main.js.
+           Sin JS, la lista de tratamientos sigue siendo el contenido real. -->
+      <figure class="arch" id="arcada">
+        <div class="arch__stage">
+          <svg class="arch__svg" viewBox="-36 -46 72 64" role="img"
+               aria-labelledby="arch-title arch-desc" data-arch>
+            <title id="arch-title">Arcada dental superior</title>
+            <desc id="arch-desc">Diagrama interactivo de los dieciséis dientes superiores. Cada zona corresponde a un tratamiento.</desc>
+          </svg>
+        </div>
+        <figcaption class="arch__caption">
+          Arcada superior · numeración FDI, la misma de tu historia clínica
+        </figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+  <!-- ───────────────────── Tratamientos ───────────────────── -->
+  <section class="section treatments" id="tratamientos">
+    <div class="wrap">
+      <header class="section__head">
+        <p class="eyebrow">Tratamientos</p>
+        <h2 class="section__title">Cada zona de la boca tiene su especialidad.</h2>
+        <p class="section__lede">
+          Toca un diente en la arcada de arriba y se resalta el tratamiento que corresponde.
+          O léelos aquí, en orden, desde el centro hacia atrás.
+        </p>
+      </header>
+
+      <ol class="tx-list" data-tx-list>
+        {% for tratamiento in tratamientos %}
+          <li class="tx" id="{{ tratamiento.ancla }}" data-tx="{{ tratamiento.zona }}" tabindex="-1">
+            <p class="tx__teeth">
+              {% for diente in tratamiento.dientes %}
+                <span>{{ diente }}</span>
+              {% empty %}
+                <span class="tx__teeth-word">{{ tratamiento.get_zona_display }}</span>
+              {% endfor %}
+            </p>
+            <div class="tx__body">
+              <h3 class="tx__name">{{ tratamiento.nombre }}</h3>
+              <p class="tx__zone">{{ tratamiento.etiqueta_zona }}</p>
+              <p class="tx__text">{{ tratamiento.descripcion }}</p>
+            </div>
+          </li>
+        {% endfor %}
+      </ol>
+
+      {% if otros_tratamientos %}
+        <div class="tx-extra">
+          <p class="tx-extra__label">Estos no dependen de un diente</p>
+          <div class="tx-extra__items">
+            {% for tratamiento in otros_tratamientos %}
+              <article class="chip">
+                <h3>{{ tratamiento.nombre }}</h3>
+                <p>{{ tratamiento.descripcion }}</p>
+              </article>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- ─────────────────────── Sedación ─────────────────────── -->
+  <section class="section sedation" id="sedacion">
+    <div class="wrap sedation__inner">
+      <div class="sedation__copy">
+        <p class="eyebrow eyebrow--light">Odontología bajo sedación</p>
+        <h2 class="section__title sedation__title">Si el miedo es el problema, empecemos por ahí.</h2>
+        <p class="sedation__text">
+          Mucha gente lleva años sin sentarse en una silla odontológica. Casi nunca es por
+          descuido: es por miedo. A la aguja, al ruido, a una mala experiencia de niño.
+        </p>
+        <p class="sedation__text">
+          En la clínica se puede hacer el tratamiento bajo sedación, para que el
+          procedimiento pase sin que lo vivas minuto a minuto. Si es tu caso, escríbenos y
+          te explicamos cómo funciona antes de que agendes nada.
+        </p>
+        <a class="btn btn--light" href="https://wa.me/{{ clinica.whatsapp }}?text=Hola%2C%20quiero%20saber%20sobre%20la%20odontolog%C3%ADa%20bajo%20sedaci%C3%B3n" target="_blank" rel="noopener">
+          Preguntar sin compromiso
+        </a>
+      </div>
+      {% if testimonios %}
+        <div class="quotes">
+          {% for testimonio in testimonios %}
+            <figure class="quote">
+              <blockquote>{{ testimonio.texto }}</blockquote>
+              <figcaption>{{ testimonio.autor }} <span>· paciente</span></figcaption>
+            </figure>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- ─────────────────────── La clínica ───────────────────── -->
+  <section class="section clinic" id="clinica">
+    <div class="wrap clinic__inner">
+      <div>
+        <p class="eyebrow">La clínica</p>
+        <h2 class="section__title">{{ clinica.odontologa }}</h2>
+        {% for parrafo in clinica.parrafos_presentacion %}
+          <p class="clinic__text">{{ parrafo }}</p>
+        {% endfor %}
+        {% if clinica.instagram %}
+          <a class="btn btn--ghost" href="{{ clinica.instagram }}" target="_blank" rel="noopener">
+            Ver casos en Instagram
+          </a>
+        {% endif %}
+      </div>
+      <ul class="clinic__points">
+        <li><strong>Todas las especialidades</strong><span>General, ortodoncia, periodoncia, rehabilitación, cirugía y odontopediatría.</span></li>
+        <li><strong>Opción de sedación</strong><span>Para pacientes con miedo o procedimientos largos.</span></li>
+        <li><strong>Un solo consultorio</strong><span>Sin remisiones de un lado a otro para terminar un tratamiento.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ──────────────────── Cita y contacto ─────────────────── -->
+  <section class="section contact" id="cita">
+    <div class="wrap">
+      <header class="section__head">
+        <p class="eyebrow">Pedir cita</p>
+        <h2 class="section__title">Déjanos tus datos y te llamamos.</h2>
+        <p class="section__lede">
+          Si prefieres, escríbenos directo por WhatsApp al {{ clinica.whatsapp_legible }}.
+          Este formulario es para que no tengas que esperar en línea.
+        </p>
+      </header>
+
+      {% if messages %}
+        {% for message in messages %}
+          <p class="aviso aviso--{{ message.tags }}" role="status">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+
+      <div class="contact__grid">
+
+        <form class="form card card--form" method="post" action="{% url 'sitio:inicio' %}#cita" novalidate>
+          {% csrf_token %}
+          {{ formulario.apellido }}
+
+          {% if formulario.non_field_errors %}
+            <p class="form__error">{{ formulario.non_field_errors|striptags }}</p>
+          {% endif %}
+
+          {% for campo in formulario.visible_fields %}
+            <p class="form__row">
+              <label for="{{ campo.id_for_label }}">{{ campo.label }}</label>
+              {{ campo }}
+              {% if campo.errors %}<span class="form__error">{{ campo.errors|striptags }}</span>{% endif %}
+            </p>
+          {% endfor %}
+
+          <button class="btn btn--solid" type="submit">Pedir la cita</button>
+        </form>
+
+        <div class="card">
+          <h3>Dirección</h3>
+          <p>
+            {{ clinica.direccion }}<br>
+            {% if clinica.consultorio %}{{ clinica.consultorio }}<br>{% endif %}
+            {{ clinica.ciudad }}, {{ clinica.departamento }}
+          </p>
+          <a href="https://www.google.com/maps/search/?api=1&query={{ clinica.direccion_completa|urlencode }}" target="_blank" rel="noopener">Abrir en Google Maps</a>
+
+          <h3 class="card__sub">Horario</h3>
+          {% for grupo in horarios %}
+            <p><span>{{ grupo.etiqueta }}</span><b>{{ grupo.franja }}</b></p>
+          {% endfor %}
+
+          <h3 class="card__sub">Contacto</h3>
+          <p>
+            <a href="{{ whatsapp_url }}">WhatsApp {{ clinica.whatsapp_legible }}</a><br>
+            {% if clinica.telefono_fijo %}<a href="tel:{{ clinica.telefono_fijo }}">Fijo {{ clinica.telefono_fijo }}</a><br>{% endif %}
+            {% if clinica.email %}<a href="mailto:{{ clinica.email }}">{{ clinica.email }}</a>{% endif %}
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
+
+{% block datos_estructurados %}
+  {% if ficha_json %}<script type="application/ld+json">{{ ficha_json }}</script>{% endif %}
+{% endblock %}

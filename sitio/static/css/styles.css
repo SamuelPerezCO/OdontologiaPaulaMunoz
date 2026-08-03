@@ -413,6 +413,8 @@ a { color: inherit; }
 .sedation__text { color: rgba(240, 235, 227, 0.76); margin-bottom: 1.1rem; max-width: 54ch; }
 .sedation__copy .btn { margin-top: 1rem; }
 
+.quotes { display: grid; gap: 1.5rem; }
+
 .quote {
   margin: 0;
   padding: 2rem;
@@ -481,6 +483,66 @@ a { color: inherit; }
 .card p span { display: inline-block; min-width: 9.5rem; color: var(--tinta-sua); }
 .card p b { font-weight: 600; font-variant-numeric: tabular-nums; }
 .card a { color: var(--encia); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.card__sub { margin-top: 1.75rem; }
+
+/* ── Formulario de cita ──────────────────────────────────── */
+
+.contact__grid { align-items: start; }
+.card--form { grid-column: span 2; }
+
+@media (max-width: 900px) {
+  .card--form { grid-column: auto; }
+}
+
+.form__row { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.1rem; }
+
+.form__row label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tinta-sua);
+}
+
+.form__row input,
+.form__row select,
+.form__row textarea {
+  width: 100%;
+  padding: 0.8rem 0.95rem;
+  border: 1.5px solid rgba(43, 39, 51, 0.18);
+  border-radius: 10px;
+  background: var(--esmalte);
+  color: var(--tinta);
+  font-family: var(--texto);
+  font-size: 1rem;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.form__row textarea { resize: vertical; min-height: 5.5rem; }
+
+.form__row input:focus,
+.form__row select:focus,
+.form__row textarea:focus {
+  outline: none;
+  border-color: var(--opalo);
+  box-shadow: 0 0 0 3px rgba(141, 164, 214, 0.28);
+}
+
+.form__error { display: block; font-size: 0.85rem; color: var(--encia-osc); font-weight: 500; }
+.form__row:has(.form__error) input,
+.form__row:has(.form__error) select,
+.form__row:has(.form__error) textarea { border-color: var(--encia); }
+
+.form button[type="submit"] { margin-top: 0.5rem; }
+
+.aviso {
+  padding: 1rem 1.25rem;
+  border-radius: var(--radio);
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.aviso--success { background: rgba(141, 164, 214, 0.2); color: var(--sedacion); }
+.aviso--error { background: rgba(184, 92, 104, 0.14); color: var(--encia-osc); }
 
 /* ── Pie ─────────────────────────────────────────────────── */
 
